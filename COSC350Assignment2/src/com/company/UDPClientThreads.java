@@ -32,6 +32,7 @@ class UDPClientThreads {
         String modifiedSentence=new String(receivePacket.getData());
         System.out.println("FROM SERVER:"+modifiedSentence);
         byte [] received = modifiedSentence.getBytes();
+        //String s = "c:\c350s18a2\client\" + fileName;
         
         
        //  for(int i  =0; i<recieveData.l)
