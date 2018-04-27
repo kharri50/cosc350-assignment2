@@ -72,12 +72,12 @@ public class UDPServerThreads {
 
                 lastPacket = Arrays.copyOf(sendData, lastLen);
 
-                System.out.println("\nActual last packet\n");
+               // System.out.println("\nActual last packet\n");
                 System.out.println(new String(lastPacket));
                 //send the correct packet now. but this packet is not being send.
                 DatagramPacket sendPacket1 = new DatagramPacket(lastPacket, lastPacket.length, address, port);
                 cSocket.send(sendPacket1);
-                System.out.println("last pack sent" + sendPacket1);
+                //System.out.println("last pack sent" + sendPacket1);
 
 
 

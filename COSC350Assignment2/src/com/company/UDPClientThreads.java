@@ -23,7 +23,7 @@ class UDPClientThreads {
         String fileName = sc.nextLine();
         
         System.out.println("Sending filename : " + fileName + " to server");
-        byte [] sendData = fileName.getBytes();
+        byte [] sendData = fileName.getBytes();       
         byte[] receiveData=new byte[1024];
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress, 31213);
         clientSocket.send(sendPacket);
@@ -39,11 +39,16 @@ class UDPClientThreads {
         /* Testing a new fileoutput stream to save the bytes to a file*/
         // some code to get the current root path
         String dir = System.getProperty("user.dir");
-        
-        try(FileOutputStream output = new FileOutputStream(dir+"/client_fileOne.mp3")){
-            // writing the file out
-            output.write(received);
+        FileOutputStream fos  = new FileOutputStream(new File(dir+"/client2.mp3"));
+        // write it out to the fileoutput stream
+        while(receiveData!=null) {
+            receivePacket =  new DatagramPacket(receiveData, receiveData.length);
+            clientSocket.receive(receivePacket);
+            fos.write(receivePacket.getData());
         }
+        fos.close();
+
+        
 
 
         
