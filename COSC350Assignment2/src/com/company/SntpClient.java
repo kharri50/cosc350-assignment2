@@ -74,8 +74,7 @@ public class SntpClient
         socket.receive(packet);
 
         // Immediately record the incoming timestamp
-        double destinationTimestamp =
-                (System.currentTimeMillis()/1000.0) + 2208988800.0;
+        double destinationTimestamp = (System.currentTimeMillis()/1000.0) + 2208988800.0;
 
 
         // Process response

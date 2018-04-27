@@ -24,17 +24,15 @@ public class UDPServerThreads {
         public void run() {
             byte[] sendData=new byte[1024];
             try{
-                String threadName =
-                        Thread.currentThread().getName();
+                String threadName = Thread.currentThread().getName();
                 String message="in HandleClient";
                 System.out.format("%s: %s%n", threadName, message);
                 long cstarttime = System.currentTimeMillis();
                 System.out.println("before csocket");
                 DatagramSocket csocket=new DatagramSocket();
-                String capitalizedSentence=new String(sentence.toUpperCase());
+                String capitalizedSentence = new String(sentence.toUpperCase());
                 sendData=capitalizedSentence.getBytes();
-                DatagramPacket sendPacket=
-                        new DatagramPacket(sendData, sendData.length, address, port);
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, address, port);
                 csocket.send(sendPacket);
                 System.out.println("after send in thread "+"IPAddress="+address+" port="+port);
                 long cendtime = System.currentTimeMillis();
@@ -53,17 +51,23 @@ public class UDPServerThreads {
     {
         UDPServerThreads udpserver= new UDPServerThreads();
         try {
-            DatagramSocket serverSocket=new DatagramSocket(9876);
+            // changing port to 31213
+            DatagramSocket serverSocket=new DatagramSocket(31213);
             byte[] receiveData=new byte[1024];
             int count=0;
             while(true)
             {
-                DatagramPacket receivePacket=
-                        new DatagramPacket(receiveData, receiveData.length);
+                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
                 System.out.println("after rcv in server");
+                // udpmessage should be the filename
                 String udpmessage=new String(receivePacket.getData());
-                System.out.println("sentence"+udpmessage);
+                //System.out.println("sentence"+udpmessage);
+                String fileName = ("c:\\c350s18a2\\client\\"+udpmessage).trim();
+                System.out.println(fileName);
+
+                // start a new thread to handle the client
+                
                 InetAddress address=receivePacket.getAddress();
                 int port=receivePacket.getPort();
                 udpserver.nonStatic(udpmessage,address,port);
