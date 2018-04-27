@@ -34,7 +34,16 @@ class UDPClientThreads {
         byte [] received = modifiedSentence.getBytes();
         //s[0] = "c:\c350s18a2\client\" + fileName;
         
+        /* Testing a new fileoutput stream to save the bytes to a file*/
+        // some code to get the current root path
+        String dir = System.getProperty("user.dir");
         
+        try(FileOutputStream output = new FileOutputStream(dir+"/client_fileOne.mp3")){
+            // writing the file out
+            output.write(received);
+        }
+
+
        //  for(int i  =0; i<recieveData.l)
         /*s[0]="a";
         s[1]="bb";
