@@ -27,6 +27,7 @@ class UDPClientThreads {
         byte[] receiveData=new byte[1024];
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress, 31213);
         clientSocket.send(sendPacket);
+        
         DatagramPacket receivePacket =  new DatagramPacket(receiveData, receiveData.length);
         clientSocket.receive(receivePacket);
         String modifiedSentence=new String(receivePacket.getData());
@@ -34,6 +35,7 @@ class UDPClientThreads {
         byte [] received = modifiedSentence.getBytes();
         //s[0] = "c:\c350s18a2\client\" + fileName;
         
+        //System.out.println("Recieved length : "+received.length);
         /* Testing a new fileoutput stream to save the bytes to a file*/
         // some code to get the current root path
         String dir = System.getProperty("user.dir");
@@ -44,28 +46,6 @@ class UDPClientThreads {
         }
 
 
-       //  for(int i  =0; i<recieveData.l)
-        /*s[0]="a";
-        s[1]="bb";
-        s[2]="ccc";
-        s[3]="dddd";
-        s[4]="eeeee";
-        int looplimit=5;
-        for (int j=0; j<looplimit; j++) {
-            for (int i=0; i<5; i++) {
-                byte[] sendData=new byte[1024];
-                byte[] receiveData=new byte[1024];
-                String sentence=s[i];
-                System.out.println("i"+i+"sent"+sentence);
-                sendData=sentence.getBytes();
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,IPAddress, 31213);
-                clientSocket.send(sendPacket);
-                DatagramPacket receivePacket =  new DatagramPacket(receiveData, receiveData.length);
-                clientSocket.receive(receivePacket);
-                String modifiedSentence=new String(receivePacket.getData());
-                System.out.println("FROM SERVER:"+modifiedSentence);
-            }
-        }*/
         
         clientSocket.close();
     }

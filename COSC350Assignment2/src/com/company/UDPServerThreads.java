@@ -26,81 +26,74 @@ public class UDPServerThreads {
 
         public void run() {
 
-            /*
-            byte[] sendData=new byte[1024];
-                 try{
-                  String threadName =
-                  Thread.currentThread().getName();
-                  String message="in HandleClient";
-                  System.out.format("%s: %s%n", threadName, message);
-                  long cstarttime = System.currentTimeMillis();
-                  System.out.println("before csocket");
-                  DatagramSocket csocket=new DatagramSocket();
-                  String capitalizedSentence=new String(sentence.toUpperCase());
-                  sendData=capitalizedSentence.getBytes();
-                  DatagramPacket sendPacket=  new DatagramPacket(sendData, sendData.length, address, port);
-                  csocket.send(sendPacket);
-                  System.out.println("after send in thread "+"IPAddress="+address+" port="+port);
-                  long cendtime = System.currentTimeMillis();
-                  System.out.println("time="+(cendtime-cstarttime));
-                 }
-                 catch (IOException e) {}
-               }
-             */
 
-            byte[] sendData = new byte[1024];
-            try{
-                String threadName = Thread.currentThread().getName();
-                String message="in HandleClient - modified to send file";
-                System.out.format("%s: %s%n", threadName, message);
-                // get a file object
-
-                // trying to open the file by the fileName
-
+            try {
+                int count = 0;
+                int MAX_SIZE = 1024;
+                DatagramSocket cSocket = new DatagramSocket();
+                byte[] sendData = new byte[MAX_SIZE];
                 Path path = Paths.get(sentence);
-                byte [] fileBytes = Files.readAllBytes(path); // reads the file as bytes
 
-                /*for(int i  = 0; i < fileBytes.length;i++){
-                    System.out.print(fileBytes[i]);
-                }*/
+                // create a new output stream and open it
+                FileInputStream inputStream = new FileInputStream(path.toFile());
 
-                /* Only sends the first 1024 bytes. The file is much larger than this */
-                for(int i = 0; i<sendData.length; i++){
-                    // set the data to the first 1024 bits of the file
-                    sendData[i] = fileBytes[i];
+                // file length
+                int fileLength = 0;
+                while ((count = inputStream.read(sendData)) != -1) {
+                    fileLength += count;
+                }
+
+                System.out.println("File length : " + fileLength);
+
+                int numPackets = fileLength / MAX_SIZE;
+                int offet = numPackets * MAX_SIZE;
+                int lastLen = fileLength - offet;
+
+                byte[] lastPacket = new byte[lastLen - 1];
+                inputStream.close();
+
+
+                // opening a new file input stream
+                FileInputStream sendingStream = new FileInputStream(path.toFile());
+                while ((count = sendingStream.read(sendData)) != -1) {
+                    if (numPackets <= 0)
+                        break;
+                    System.out.println(new String(sendData));
+                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, address, port);
+                    cSocket.send(sendPacket);
+                    System.out.println("========");
+                    System.out.println("last pack sent" + sendPacket);
+                    numPackets--;
+                }
+
+                //check
+                System.out.println("\nlast packet\n");
+                System.out.println(new String(sendData));
+
+                lastPacket = Arrays.copyOf(sendData, lastLen);
+
+                System.out.println("\nActual last packet\n");
+                System.out.println(new String(lastPacket));
+                //send the correct packet now. but this packet is not being send.
+                DatagramPacket sendPacket1 = new DatagramPacket(lastPacket, lastPacket.length, address, port);
+                cSocket.send(sendPacket1);
+                System.out.println("last pack sent" + sendPacket1);
+
+
+
+                   }catch (IOException e) {
+                        System.out.println("Exception being caught");
                 }
 
 
-                System.out.print("Send data length: " + sendData.length + "\n");
-
-                /* S0 I"M NOT SURE THAT THIS WORKS. It probably needs to be touched up... */
-
-                long cstarttime = System.currentTimeMillis();
-                System.out.println("before csocket");
-                DatagramSocket csocket=new DatagramSocket();
-
-
-                /* the datagram is the packet that we created with the sendData
-                   where the array indicies are initalized so the data can be sent
-                 */
-
-                // make a new datagram send packed
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, address, port);
-                // send the packet
-                csocket.send(sendPacket);
-
-                System.out.println("after send in thread "+"IPAddress="+address+" port="+port);
-
-                //System.out.println("Transfer time : " + (endTime-cstarttime));
 
             }
-            catch (IOException e) {
-            }
-
-
-
         }
-    }
+
+
+
+
+
 
     public void nonStatic(String udpmessage, InetAddress address, int port) {
         Thread t = new Thread(new UDPClientHandler1(udpmessage,address,port));
