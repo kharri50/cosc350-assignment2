@@ -5,6 +5,7 @@ package com.company;
  */
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 class UDPClientThreads {
     public static void main(String args[]) throws Exception
     {
@@ -13,11 +14,13 @@ class UDPClientThreads {
         InetAddress IPAddress=InetAddress.getByName("localhost");
         String[] s=new String[5];
         
-        /* Commenting out code becuase I'm not really sure what 
+        /* Commenting out code because I'm not really sure what 
          * i'll actually need to use. 
          */
         
-        String fileName = "bogusName.mp3";
+        Scanner sc= new Scanner(System.in);
+        System.out.println("Enter a filename: ");
+        String fileName = sc.nextLine();
         
         System.out.println("Sending filename : " + fileName + " to server");
         byte [] sendData = fileName.getBytes();
@@ -28,7 +31,10 @@ class UDPClientThreads {
         clientSocket.receive(receivePacket);
         String modifiedSentence=new String(receivePacket.getData());
         System.out.println("FROM SERVER:"+modifiedSentence);
+        byte [] received = modifiedSentence.getBytes();
         
+        
+       //  for(int i  =0; i<recieveData.l)
         /*s[0]="a";
         s[1]="bb";
         s[2]="ccc";
