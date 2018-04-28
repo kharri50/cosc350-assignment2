@@ -122,7 +122,7 @@ public class UDPServerThreads {
 
                 // String fileName = ("c:\\c350s18a2\\client\\"+udpmessage).trim();
                 String fileName = udpmessage.trim();
-                System.out.println("Filename : "+fileName);
+                System.out.println("Filename : "+ fileName);
 
                 /* start a new thread to handle the client - looks like this
                 * is already kind of done in the run() method of the UDPClientHandler
