@@ -46,6 +46,17 @@ class UDPClientThreads {
             clientSocket.receive(receivePacket);
             fos.write(receivePacket.getData());
         }
+        
+        //Sending NTP Message
+        System.out.println("Enter NTP Server Name: ");
+        String ntpServer = sc.nextLine();
+        DatagramSocket socket = new DatagramSocket();
+        InetAddress address = InetAddress.getByName(ntpServer);
+        byte[] buf = new NtpMessage().toByteArray();
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 123);
+        socket.send(packet);
+        
+        
         fos.close();
 
         
